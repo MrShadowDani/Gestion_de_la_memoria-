@@ -22,23 +22,29 @@ int main() {
         return 1;
     }
 
-    pid_t pid = fork();
+    STARTUPINFO si;
+    PROCESS_INFORMATION pi;
 
-    if (pid < 0) {
-        printf("Error occurred during fork.\n");
-        CloseHandle(hMapFile);
+    ZeroMemory(&si, sizeof(si));
+    si.cb = sizeof(si);
+    ZeroMemory(&pi, sizeof(pi));
+
+    if (!CreateProcess(NULL, "child_process.exe", NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
+        printf("CreateProcess failed (%d).\n", GetLastError());
         UnmapViewOfFile(pBuf);
+        CloseHandle(hMapFile);
         return 1;
-    } else if (pid == 0) {
-        printf("Child reads: %s\n", pBuf);
-        UnmapViewOfFile(pBuf);
-        CloseHandle(hMapFile);
-        return 0;
-    } else {
-        strcpy(pBuf, "Hello, child process!");
-        WaitForSingleObject(pid, INFINITE);
-        UnmapViewOfFile(pBuf);
-        CloseHandle(hMapFile);
-        return 0;
     }
+
+    strcpy(pBuf, "Hello, child process!");
+    WaitForSingleObject(pi.hProcess, INFINITE);
+
+    printf("Child reads: %s\n", pBuf);
+
+    UnmapViewOfFile(pBuf);
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+    CloseHandle(hMapFile);
+
+    return 0;
 }
