@@ -6,17 +6,17 @@
 
 int main() {
     HANDLE hMapFile;
-    LPTSTR pBuf;
+    char* pBuf;
 
-    hMapFile = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, SIZE, "SharedMemory");
-    if (hMapFile == NULL) {
-        printf("Could not create file mapping object (%d).\n", GetLastError());
+    hMapFile = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, SIZE, "SharedMemory");
+    if (hMapFile == nullptr) {
+        printf("Could not create file mapping object (%lu).\n", GetLastError());
         return 1;
     }
 
-    pBuf = (LPTSTR)MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, SIZE);
-    if (pBuf == NULL) {
-        printf("Could not map view of file (%d).\n", GetLastError());
+    pBuf = static_cast<char*>(MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, SIZE));
+    if (pBuf == nullptr) {
+        printf("Could not map view of file (%lu).\n", GetLastError());
         CloseHandle(hMapFile);
         return 1;
     }
@@ -28,8 +28,8 @@ int main() {
     si.cb = sizeof(si);
     ZeroMemory(&pi, sizeof(pi));
 
-    if (!CreateProcess(NULL, "child_process.exe", NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
-        printf("CreateProcess failed (%d).\n", GetLastError());
+    if (!CreateProcess(nullptr, "child_process.exe", nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi)) {
+        printf("CreateProcess failed (%lu).\n", GetLastError());
         UnmapViewOfFile(pBuf);
         CloseHandle(hMapFile);
         return 1;
@@ -42,9 +42,4 @@ int main() {
     printf("Child reads: %s\n", pBuf);
 
     UnmapViewOfFile(pBuf);
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
-    CloseHandle(hMapFile);
-
-    return 0;
-}
+    CloseHandle(
