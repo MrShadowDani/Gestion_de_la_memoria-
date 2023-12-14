@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <windows.h>
 
 #define SIZE 4096
@@ -49,4 +48,3 @@ int main() {
 
     return 0;
 }
-
