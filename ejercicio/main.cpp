@@ -7,7 +7,7 @@
 
 int main() {
     HANDLE hMapFile;
-    LPCTSTR pBuf;
+    LPTSTR pBuf;
 
     hMapFile = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, SIZE, "SharedMemory");
     if (hMapFile == NULL) {
@@ -36,7 +36,8 @@ int main() {
         return 1;
     }
 
-    strcpy(pBuf, "Hello, child process!");
+    // Copying string to shared memory
+    strcpy_s(pBuf, SIZE, "Hello, child process!");
     WaitForSingleObject(pi.hProcess, INFINITE);
 
     printf("Child reads: %s\n", pBuf);
@@ -48,3 +49,4 @@ int main() {
 
     return 0;
 }
+
