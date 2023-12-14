@@ -1,0 +1,3 @@
+C:/Users/danij/OneDrive/Documentos/GitHub/Gestion_de_la_memoria-/ejercicio/cmake-build-debug/CMakeFiles/ejercicio.dir
+C:/Users/danij/OneDrive/Documentos/GitHub/Gestion_de_la_memoria-/ejercicio/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/danij/OneDrive/Documentos/GitHub/Gestion_de_la_memoria-/ejercicio/cmake-build-debug/CMakeFiles/rebuild_cache.dir
