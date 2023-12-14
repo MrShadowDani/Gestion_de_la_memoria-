@@ -14,7 +14,7 @@ int main() {
         return 1;
     }
 
-    pBuf = static_cast<char*>(MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, SIZE));
+    pBuf = reinterpret_cast<char*>(MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, SIZE));
     if (pBuf == nullptr) {
         printf("Could not map view of file (%lu).\n", GetLastError());
         CloseHandle(hMapFile);
@@ -42,4 +42,9 @@ int main() {
     printf("Child reads: %s\n", pBuf);
 
     UnmapViewOfFile(pBuf);
-    CloseHandle(
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+    CloseHandle(hMapFile);
+
+    return 0;
+}
